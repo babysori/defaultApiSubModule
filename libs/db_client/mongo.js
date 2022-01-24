@@ -2,8 +2,10 @@
 
 const { MongoClient } = require('mongodb');
 
-const errors = require('../errors');
-const logger = require('../logger');
+require('module-alias/register');
+
+const errors = require('#/libs/errors');
+const logger = require('#/libs/logger');
 
 module.exports = (endPoint, database) => {
   const client = new MongoClient(endPoint, { useNewUrlParser: true, useUnifiedTopology: true });

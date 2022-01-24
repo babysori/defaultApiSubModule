@@ -13,6 +13,11 @@ const raw = {
       secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
     },
 
+    appleId: env.APPLE_ID, // 보안관계로 노출을 피하기 위해 env로부터 읽어오도록 처리
+
+    accessTokenExpiryTime: env.ACCESS_TOKEN_EXPIRE_SECOND || 10 * 3600,
+    refreshTokenExpiredTime: env.REFRESH_TOKEN_EXPIRE_SECOND || 10 * 3600,
+
     logDb: {
       endPoint: env.LOG_DB_END_POINT,
       database: 'logs',
@@ -55,7 +60,7 @@ const raw = {
     // main db
     sequelize: {
       username: 'root',
-      password: '1234',
+      // password: 'user1234',
       database: 'default',
       host: 'localhost',
       port: 3306,
@@ -74,6 +79,8 @@ const raw = {
     redis: {
       endPoint: 'localhost',
     },
+
+    accessTokenExpiryTime: 24 * 365 * 3600, // 테스트를 위해 오래 설정함
   },
 
   test: {

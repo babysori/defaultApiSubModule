@@ -3,7 +3,9 @@
 const AWS = require('aws-sdk');
 const https = require('https');
 
-const config = require('../config');
+require('module-alias/register');
+
+const config = require('#/config');
 
 if (process.env.NODE_ENV === 'develop') {
   const options = {

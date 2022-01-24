@@ -7,8 +7,11 @@ const table = {
   FatalError: 100,
 
   // Invalid data errors(1XX)
+  InvalidInputError: 101, // 클라이언트로부터 전송받은 parameter 오류
+  InvalidAccessTokenError: 102, // 토큰 인증 오류(만료 포함)
 
   // Cannot find data errors(2XX)
+  NoUserError: 201, // 사용자 없음
 
   // Extern API errors(3XX)
 
@@ -24,10 +27,20 @@ const table = {
   CommonError: 10000,
 
   // Invalid data errors for V1(100XX)
+  ProhibitionExistError: 10001, // 금칙어가 포함되어 있음
 
   // Account errors for V1(101XX)
+  AlreadyExistAccountError: 10101, // 중복된 계정
+  InvalidPasswordError: 10102, // 비번 오류
+  ChangedAccessTokenError: 10103, // 다른기기에서 로그인했음
+  AlreadyExistEmailError: 10104, // 중복된 email
+  DeletedAccountError: 10105, // 탈퇴한 계정으로 가입시도함
+  NoAccountError: 10106, // 계정없음
+  VerificationSocialAccountError: 10107, // Social 계정 인증 오류
+  NotAuthorizedError: 10108, // 인증되지 않은 계정
 
   // User errors for V1(102XX)
+  AlreadyExistNicknameError: 10201, // 중복된 nickname
 
   // Status & Banned for V1(103XX)
   BannedUserError: 10301, // 어뷰저로 등록된 유저
