@@ -1,7 +1,9 @@
 'use strict';
 
-const { TEMPLATE } = require('../../libs/constants').DDBTableName;
+require('module-alias/register');
+
+const { TEMPLATE } = require('#/libs/constants').DDBTableName;
 // eslint-disable-next-line global-require
-const handler = { ...require('../../libs/db_handler/dynamo')(TEMPLATE) };
+const handler = { ...require('#/libs/db_handler/dynamo')(TEMPLATE) };
 
 module.exports = handler;

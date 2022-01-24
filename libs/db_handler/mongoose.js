@@ -1,8 +1,10 @@
 'use strict';
 
-const errors = require('../errors');
+require('module-alias/register');
 
-module.exports = Model => ({
+const errors = require('#/libs/errors');
+
+module.exports = (Model) => ({
   async get(query, projection) {
     try {
       return await Model.findOne(query, projection);

@@ -4,9 +4,11 @@ const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
 
-const config = require('../../config');
+require('module-alias/register');
+
+const config = require('#/config');
 const baseName = path.basename(__filename);
-const { dotCaseToCamelCase } = require('../../libs/util');
+const { dotCaseToCamelCase } = require('#/libs/util');
 
 const sequelize = new Sequelize(config.sequelize);
 const db = { sequelize };

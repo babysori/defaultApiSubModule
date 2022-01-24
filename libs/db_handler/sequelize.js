@@ -1,7 +1,9 @@
 'use strict';
 
-const errors = require('../errors');
-const { isEmpty } = require('../util');
+require('module-alias/register');
+
+const errors = require('#/libs/errors');
+const { isEmpty } = require('#/libs/util');
 
 function buildReadOptions(where, {
   attributes, transaction, order, offset, limit, include,
@@ -34,7 +36,7 @@ async function queryFunc(model, where, params) {
     const data = await model.findAll(options);
     if (!data) return [];
 
-    return data.map(l => l.dataValues);
+    return data.map((l) => l.dataValues);
   } catch (err) {
     err.tableName = model.name;
     throw new errors.DbError(null, err);
@@ -75,7 +77,7 @@ async function updateFunc(model, where, value, params) {
   }
 }
 
-module.exports = model => ({
+module.exports = (model) => ({
   async get(where, params) {
     params = { ...(params || {}), limit: 1 };
 

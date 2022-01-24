@@ -2,4 +2,4 @@
 
 const { sequelize } = require('../sequelize_model');
 
-exports.transaction = callback => sequelize.transaction(transaction => callback(transaction));
+exports.transaction = (callback) => sequelize.transaction((transaction) => callback(transaction));

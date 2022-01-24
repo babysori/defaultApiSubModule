@@ -1,5 +1,7 @@
 'use strict';
 
-const config = require('../../config');
+require('module-alias/register');
 
-module.exports = require('../../libs/db_client/redis')(config.redis.endPoint);
+const config = require('#/config');
+
+module.exports = require('#/libs/db_client/redis')(config.redis.endPoint);

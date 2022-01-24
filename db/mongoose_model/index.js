@@ -4,10 +4,12 @@ const fs = require('fs');
 const path = require('path');
 const Mongoose = require('mongoose');
 
-const config = require('../../config');
-const baseName = path.basename(__filename);
-const { dotCaseToCamelCase } = require('../../libs/util');
+require('module-alias/register');
 
+const config = require('#/config');
+const { dotCaseToCamelCase } = require('#/libs/util');
+
+const baseName = path.basename(__filename);
 const mongoose = Mongoose.createConnection(
   config.mongoose.endPoint, { useNewUrlParser: true, useUnifiedTopology: true },
 );
@@ -28,7 +30,7 @@ function importFile(file, dir) {
 
   if (stats.isDirectory()) {
     const d = dir ? `${dir}/${file}` : file;
-    return fs.readdirSync(fullPath).forEach(f => importFile(f, d));
+    return fs.readdirSync(fullPath).forEach((f) => importFile(f, d));
   }
 
   if (path.extname(file) === '.js' && file !== baseName) {

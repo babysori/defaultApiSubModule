@@ -3,8 +3,10 @@
 const { createClient } = require('redis');
 const { promisify } = require('util');
 
-const errors = require('../errors');
-const logger = require('../logger');
+require('module-alias/register');
+
+const errors = require('#/libs/errors');
+const logger = require('#/libs/logger');
 
 function convertToObject(value) {
   if (Array.isArray(value)) {

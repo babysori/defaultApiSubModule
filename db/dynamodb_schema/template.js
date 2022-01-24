@@ -1,7 +1,9 @@
 'use strict';
 
-const { ddb } = require('../../libs/aws');
-const { TEMPLATE } = require('../../libs/constants').DDBTableName;
+require('module-alias/register');
+
+const { ddb } = require('#/libs/aws');
+const { TEMPLATE } = require('#/libs/constants').DDBTableName;
 
 const params = {
   TableName: TEMPLATE,

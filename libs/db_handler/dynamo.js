@@ -1,7 +1,9 @@
 'use strict';
 
-const { doc } = require('../aws');
-const errors = require('../errors');
+require('module-alias/register');
+
+const { doc } = require('#/libs/aws');
+const errors = require('#/libs/errors');
 
 async function batchGet(TableName, Keys) {
   const data = await doc.batchGet({
