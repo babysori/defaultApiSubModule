@@ -8,6 +8,7 @@ const raw = {
     isLocal: env.NODE_ENV === 'develop',
     isTest: env.NODE_ENV === 'develop' || env.NODE_ENV === 'test',
     isQA: Number(env.QA_MODE) || 0,
+
     aws: {
       region: 'ap-northeast-2', // Seoul
       accessKeyId: env.AWS_ACCCESS_KEY_ID,
@@ -18,7 +19,7 @@ const raw = {
       endPoint: env.LOG_DB_END_POINT,
       database: 'logs',
     },
-    // main db
+
     sequelize: {
       username: env.SEQUELIZE_USER,
       password: env.SEQUELIZE_PASSWORD,
@@ -48,12 +49,17 @@ const raw = {
     clustering: false,
     makeTable: true,
 
-    // log db
+    aws: {
+      region: 'us-east-1',
+      accessKeyId: 'key',
+      secretAccessKey: 'key',
+    },
+
     logDb: {
       endPoint: 'mongodb://localhost:27017',
       database: 'logs',
     },
-    // main db
+
     sequelize: {
       username: 'root',
       password: '1234',

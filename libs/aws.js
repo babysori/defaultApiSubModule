@@ -10,7 +10,9 @@ const config = require('#/config');
 if (process.env.NODE_ENV === 'develop') {
   const options = {
     endpoint: 'http://localhost:8000',
-    region: 'ap-northeast-1',
+    region: config.aws.region,
+    accessKeyId: config.aws.accessKeyId,
+    secretAccessKey: config.aws.secretAccessKey,
   };
 
   exports.ddb = new AWS.DynamoDB(options);

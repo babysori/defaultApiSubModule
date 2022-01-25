@@ -16,7 +16,7 @@ async function batchGet(TableName, Keys) {
 }
 
 async function batchWrite(TableName, Items) {
-  const params = Items.map(i => ({
+  const params = Items.map((i) => ({
     PutRequest: {
       Item: i,
     },
@@ -29,7 +29,7 @@ async function batchWrite(TableName, Items) {
   }).promise();
 }
 
-module.exports = TableName => ({
+module.exports = (TableName) => ({
   async get(params, ...Key) {
     if (!Key.length) {
       if (!params) throw new Error('no item');

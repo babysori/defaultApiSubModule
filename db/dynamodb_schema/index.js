@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const baseName = path.basename(__filename);
+const basePath = `${__dirname}/index.js`;
 
 function makeTable(file, dir) {
   let fullPath = __dirname;
@@ -20,10 +20,10 @@ function makeTable(file, dir) {
 
   if (stats.isDirectory()) {
     const d = dir ? `${dir}/${file}` : file;
-    return fs.readdirSync(fullPath).forEach(f => makeTable(f, d));
+    return fs.readdirSync(fullPath).forEach((f) => makeTable(f, d));
   }
 
-  if (path.extname(file) === '.js' && file !== baseName) {
+  if (path.extname(file) === '.js' && fullPath !== basePath) {
     require(fullPath); // eslint-disable-line global-require
   }
 }
