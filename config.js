@@ -7,6 +7,7 @@ const raw = {
   common: {
     isLocal: env.NODE_ENV === 'develop',
     isTest: env.NODE_ENV === 'develop' || env.NODE_ENV === 'test',
+    isQA: Number(env.QA_MODE) || 0,
     aws: {
       region: 'ap-northeast-2', // Seoul
       accessKeyId: env.AWS_ACCCESS_KEY_ID,
