@@ -6,9 +6,13 @@ require('module-alias/register');
 
 const config = require('#/config');
 const errors = require('#/libs/errors');
+const { isEmpty } = require('#/libs/util');
 
-const AccountSDB = require('#/db/sequelize/account');
-const AccountQuitSDB = require('#/db/sequelize/account.quit');
+// for MySQL
+// const AccountSDB = require('#/db/sequelize/account');
+// const AccountQuitSDB = require('#/db/sequelize/account.quit');
+const AccountDDB = require('#/db/dynamodb/account');
+const AccountQuitDDB = require('#/db/dynamodb/account/quit');
 
 const { AccountType } = require('#/libs/constants');
 
@@ -87,33 +91,43 @@ exports.verifyLineToken = async (id, accessToken) => {
 };
 
 exports.checkDuplication = async (type, id) => {
-  const item = await AccountSDB.get({ type, id }, { attributes: ['id', 'type'] });
+  // const item = await AccountSDB.get({ type, id }, { attributes: ['id', 'type'] });
+  const item = await AccountDDB.get({ type, id });
 
   if (item) throw new errors.AlreadyExistAccountError();
 };
 
 exports.checkDuplicationByOwner = async (type, owner) => {
-  const items = await AccountSDB.query({ owner, type }, { attributes: ['id', 'type'] });
+  // for MySQL
+  // const items = await AccountSDB.query({ owner, type }, { attributes: ['id', 'type'] });
+  // for DynamoDB
+  const items = await AccountDDB.queryByOwnerType(owner, type);
 
   if (items.length) throw new errors.AlreadyExistAccountError();
 };
 
 exports.getObject = async (type, id, checkAuth = true) => {
-  const item = await AccountSDB.get({ type, id });
+  // for MySQL
+  // const item = await AccountSDB.get({ type, id });
+  // for DynamoDB
+  const item = await AccountDDB.get({ type, id });
 
   if (!item) throw new errors.NoAccountError();
-  if (checkAuth && !item.auth) throw new errors.NotAuthorizedError();
+  if (checkAuth && item.auth === 0) throw new errors.NotAuthorizedError();
 
   return item;
 };
 
 exports.getAllObjectsByOwner = async (owner) => {
-  const items = await AccountSDB.query({ owner });
+  // for MySQL
+  // const items = await AccountSDB.query({ owner });
+  // for DynamoDB
+  const items = await AccountDDB.queryAllByOwner(owner);
 
   return items;
 };
 
-exports.createObject = async (params, transaction) => {
+exports.createObject = async (params/* , transaction */) => { // for MySQL
   const {
     type, id, password, owner,
   } = params;
@@ -121,12 +135,17 @@ exports.createObject = async (params, transaction) => {
   const account = {
     type, id, owner,
   };
-  if (type === AccountType.EMAIL) account.auth = false;
+  if (type === AccountType.EMAIL) account.auth = 0;
+  // for MySQL
+  // else account.auth = 1;
   if (password && (type === AccountType.USERNAME || type === AccountType.EMAIL)) {
     account.password = md5(password);
   }
 
-  await AccountSDB.put(transaction, account);
+  // for MySQL
+  // await AccountSDB.put(transaction, account);
+  // for DynamoDB
+  await AccountDDB.put(account);
 
   return account;
 };
@@ -142,15 +161,28 @@ exports.changeObject = async (account, params) => {
     throw new errors.InvalidInputError('no password type');
   }
 
-  const value = {
-    auth,
-  };
-  if (password) value.password = md5(password);
-  const where = { type: account.type, id: account.id };
-  await AccountSDB.update(where, value);
+  const value = {};
+  if (auth && account.auth !== auth) {
+    account.auth = auth;
+    value.auth = auth;
+  }
+  if (password) {
+    const newPassword = md5(password);
+    if (account.password !== newPassword) {
+      account.password = newPassword;
+      value.password = newPassword;
+    }
+  }
+
+  if (!isEmpty(value)) {
+    // for MySQL
+    // await AccountSDB.update({ type: account.type, id: account.id }, value);
+    // for DynamoDB
+    await AccountDDB.set({ type: account.type, id: account.id }, value);
+  }
 };
 
-exports.removeAllObjectsByOwner = async (owner, accountQuits, transaction) => {
+exports.removeAllObjectsByOwner = async (owner, accountQuits/* , transaction */) => { // for MySQL
   accountQuits = accountQuits.map((a) => ({
     type: a.type,
     accountId: a.id,
@@ -158,7 +190,9 @@ exports.removeAllObjectsByOwner = async (owner, accountQuits, transaction) => {
   }));
 
   await Promise.all([
-    AccountSDB.delete({ owner }, { transaction }),
-    AccountQuitSDB.put(transaction, accountQuits),
+    // AccountSDB.delete({ owner }, { transaction }),
+    // AccountQuitSDB.put(transaction, accountQuits),
+    AccountDDB.delete({ owner }),
+    AccountQuitDDB.put(accountQuits),
   ]);
 };

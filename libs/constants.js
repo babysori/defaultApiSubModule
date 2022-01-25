@@ -18,5 +18,8 @@ exports.AccountType = Object.freeze({
 });
 
 exports.DDBTableName = Object.freeze({
-  TEMPLATE: addPrefix('template'),
+  ACCOUNT: addPrefix('account'),
+  ACCOUNT_QUIT: addPrefix('account.quit'),
+  USER: addPrefix('user'),
+  USER_QUIT: addPrefix('user.quit'),
 });
