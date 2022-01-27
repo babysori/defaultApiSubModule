@@ -9,7 +9,7 @@ require('module-alias/register');
 const config = require('#/config');
 const { dotCaseToCamelCase } = require('#/libs/util');
 
-const baseName = path.basename(__filename);
+const basePath = `${__dirname}/index.js`;
 const mongoose = Mongoose.createConnection(
   config.mongoose.endPoint, { useNewUrlParser: true, useUnifiedTopology: true },
 );
@@ -33,12 +33,17 @@ function importFile(file, dir) {
     return fs.readdirSync(fullPath).forEach((f) => importFile(f, d));
   }
 
-  if (path.extname(file) === '.js' && file !== baseName) {
+  if (path.extname(file) === '.js' && fullPath !== basePath) {
     const r = require(fullPath); // eslint-disable-line global-require
 
     if (r) {
       let name = path.basename(file, '.js');
-      name = dir ? path.join(dir, name) : name;
+
+      if (name === 'index') {
+        name = dir;
+      } else {
+        name = dir ? path.join(dir, name) : name;
+      }
       name = name.replace(/\//g, '.');
 
       db[dotCaseToCamelCase(name)] = r(mongoose);

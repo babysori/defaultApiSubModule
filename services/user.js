@@ -8,15 +8,20 @@ const errors = require('#/libs/errors');
 // const UserSDB = require('#/db/sequelize/user');
 // const UserQuitSDB = require('#/db/sequelize/user.quit');
 // for DynamoDB
-const UserDDB = require('#/db/dynamodb/user');
-const UserQuitDDB = require('#/db/dynamodb/user/quit');
+// const UserDDB = require('#/db/dynamodb/user');
+// const UserQuitDDB = require('#/db/dynamodb/user/quit');
+// for MongoDB
+const UserMDB = require('#/db/mongoose/user');
+const UserQuitMDB = require('#/db/mongoose/user/quit');
 const { isEmpty } = require('#/libs/util');
 
 exports.getObject = async (owner) => {
   // for MySQL
   // const user = await UserSDB.get({ id: owner });
   // for DynamoDB
-  const user = await UserDDB.get({ id: owner });
+  // const user = await UserDDB.get({ id: owner });
+  // for MongoDB
+  const user = await UserMDB.get({ id: owner });
 
   if (!user) throw new errors.NoUserError();
   if (user.abuser) throw new errors.AbuserError();
@@ -29,7 +34,10 @@ exports.getObject = async (owner) => {
 exports.getInfo = async (owner) => {
   // for MySQL
   // const item = await UserSDB.getForClient(owner);
-  const item = await UserDDB.getForClient({ id: owner });
+  // for DynamoDB
+  // const item = await UserDDB.getForClient({ id: owner });
+  // for MongoDB
+  const item = await UserMDB.getForClient({ id: owner });
 
   if (!item) throw new errors.NoUserError();
 
@@ -40,7 +48,10 @@ exports.getInfo = async (owner) => {
 exports.getDetailInfo = async (owner) => {
   // for MySQL
   // const item = await UserSDB.getDetailForClient(owner);
-  const item = await UserDDB.getDetailForClient(owner);
+  // for DynamoDB
+  // const item = await UserDDB.getDetailForClient(owner);
+  // for MongoDB
+  const item = await UserMDB.getDetailForClient(owner);
 
   if (!item) throw new errors.NoUserError();
 
@@ -59,7 +70,9 @@ exports.createObject = async (params/* , transaction */) => { // for MySQL
   // for MySQL
   // await UserSDB.put(transaction, user);
   // for DynamoDB
-  await UserDDB.put(user);
+  // await UserDDB.put(user);
+  // for MongoDB
+  await UserMDB.put(user);
 
   return user;
 };
@@ -76,7 +89,10 @@ exports.changeObject = async (user, params) => {
   if (!isEmpty(value)) {
     // for MySQL
     // await UserSDB.update({ id }, value);
-    await UserDDB.set({ id }, value);
+    // for DynamoDB
+    // await UserDDB.set({ id }, value);
+    // for MongoDB
+    await UserMDB.update({ id }, value);
   }
 
   user.nickname = nickname;
@@ -94,7 +110,10 @@ exports.removeObject = async (userQuit/* , transaction */) => { // for MySQL
     // UserSDB.delete({ id: userQuit.id }, { transaction }),
     // UserQuitSDB.put(transaction, userQuit),
     // for DynamoDB
-    UserDDB.delete({ id }),
-    UserQuitDDB.put(userQuit),
+    // UserDDB.delete({ id }),
+    // UserQuitDDB.put(userQuit),
+    // for MongoDB
+    UserMDB.delete({ id }),
+    UserQuitMDB.put(userQuit),
   ]);
 };
