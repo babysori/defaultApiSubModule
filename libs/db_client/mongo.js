@@ -1,6 +1,6 @@
 'use strict';
 
-const { MongoClient } = require('mongodb');
+const { MongoClient } = require('mongodb'); // eslint-disable-line import/no-unresolved
 
 require('module-alias/register');
 

@@ -2,7 +2,7 @@
 
 require('module-alias/register');
 
-const { user } = require('../sequelize_model');
+const { user } = require('#/db/sequelize_model');
 // eslint-disable-next-line global-require
 const handler = { ...require('#/libs/db_handler/sequelize')(user) };
 
