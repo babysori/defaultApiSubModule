@@ -1,5 +1,5 @@
 'use strict';
 
-const { sequelize } = require('../sequelize_model');
+const { sequelize } = require('#/db/sequelize_model');
 
 exports.transaction = (callback) => sequelize.transaction((transaction) => callback(transaction));

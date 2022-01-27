@@ -10,7 +10,7 @@ const { isEmpty } = require('#/libs/util');
 
 // for MySQL
 // const AccountSDB = require('#/db/sequelize/account');
-// const AccountQuitSDB = require('#/db/sequelize/account.quit');
+// const AccountQuitSDB = require('#/db/sequelize/account/quit');
 // for DynamoDB
 // const AccountDDB = require('#/db/dynamodb/account');
 // const AccountQuitDDB = require('#/db/dynamodb/account/quit');
