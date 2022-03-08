@@ -130,8 +130,17 @@ module.exports = (TableName) => ({
     );
   },
 
-  async count() {
-    throw new Error('unsupported');
+  async count(KeyConditionExpression, ExpressionAttributeNames, ExpressionAttributeValues, params,) {
+    const newParams = {
+      TableName,
+      KeyConditionExpression,
+      ExpressionAttributeNames,
+      ExpressionAttributeValues,
+      Select: 'COUNT',
+      ...(params || {}),
+    };
+
+    return doc.scan(newParams).promise();
   },
 
   async put(...Item) {
