@@ -81,6 +81,8 @@ const raw = {
     redis: {
       endPoint: 'localhost',
     },
+
+    accessTokenExpiryTime: 3600 * 24,
   },
 
   test: {
