@@ -31,13 +31,13 @@ exports.getDateString = (format, timezone, offset, date) => {
 exports.snakeCaseToCamelCase = (word) => {
   word = word.toLocaleLowerCase();
   const find = /_\w/g;
-  const convert = matches => matches[1].toUpperCase();
+  const convert = (matches) => matches[1].toUpperCase();
   return word.replace(find, convert);
 };
 
 exports.dotCaseToCamelCase = (word) => {
   word = word.toLocaleLowerCase();
   const find = /\.\w/g;
-  const convert = matches => matches[1].toUpperCase();
+  const convert = (matches) => matches[1].toUpperCase();
   return word.replace(find, convert);
 };

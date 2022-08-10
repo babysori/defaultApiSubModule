@@ -7,7 +7,7 @@ const { Types } = Schema;
 const { Mixed, ObjectId } = Types;
 
 const schema = new Schema({
-  _id: { type: ObjectId, alias: 'id' },
+  _id: { type: ObjectId },
   item: { type: Mixed },
 }, {
   collection: 'user_quit',

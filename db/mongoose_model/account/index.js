@@ -6,7 +6,7 @@ const { Schema } = Mongoose;
 
 const schema = new Schema({
   type: { type: String, required: true },
-  _id: { type: String, alias: 'id' },
+  _id: { type: String },
   password: { type: String },
   auth: { type: Boolean },
   owner: { type: String },

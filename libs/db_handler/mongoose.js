@@ -3,51 +3,38 @@
 require('module-alias/register');
 
 const errors = require('#/libs/errors');
-const { UniqueId } = require('#/libs/util');
-
-function exchangeQueryId(query) {
-  if (!query._id && query.id) { // eslint-disable-line no-underscore-dangle
-    query._id = query.id; // eslint-disable-line no-underscore-dangle
-    delete query.id;
-  }
-
-  return query;
-}
-
-function checkId(items) {
-  if (items.length) {
-    items.forEach((i) => {
-      if (!i._id) i._id = UniqueId(); // eslint-disable-line no-underscore-dangle
-    });
-  } else if (!items._id) { // eslint-disable-line no-underscore-dangle
-    items._id = UniqueId(); // eslint-disable-line no-underscore-dangle
-  }
-
-  return items;
-}
 
 module.exports = (Model) => ({
+  Model,
+
   async get(query, projection) {
     try {
-      return await Model.findOne(exchangeQueryId(query), projection);
+      return Model.findOne(query, projection);
     } catch (err) {
       err.tableName = Model.modelName;
       throw new errors.DbError(null, err);
     }
   },
 
-  async query(query, projection) {
+  async query({
+    query = {}, projection, skip, limit,
+  }) {
     try {
-      return await Model.find(exchangeQueryId(query), projection);
+      let items = Model.find(query, projection);
+
+      if (skip) items = items.skip(skip);
+      if (limit) items = items.limit(limit);
+
+      return await items;
     } catch (err) {
       err.tableName = Model.modelName;
       throw new errors.DbError(null, err);
     }
   },
 
-  async count(query) {
+  async count(query = {}) {
     try {
-      return await Model.count(exchangeQueryId(query));
+      return await Model.count(query);
     } catch (err) {
       err.tableName = Model.modelName;
       throw new errors.DbError(null, err);
@@ -64,8 +51,6 @@ module.exports = (Model) => ({
         if (Array.isArray(item)) {
           if (!item.length) throw new errors.InternalError('invalid parameter');
 
-          checkId(item);
-
           const parallelList = [];
           item.forEach((i) => {
             const data = new Model(i);
@@ -74,11 +59,11 @@ module.exports = (Model) => ({
 
           await Promise.all(parallelList);
         } else {
-          const data = new Model(checkId(item));
+          const data = new Model(item);
           await data.save();
         }
       } else {
-        const data = new Model(checkId(item));
+        const data = new Model(item);
         await data.save();
       }
     } catch (err) {
@@ -95,7 +80,7 @@ module.exports = (Model) => ({
     }
 
     try {
-      await Model.updateOne(exchangeQueryId(query), value, { upsert });
+      await Model.updateOne(query, value, { upsert });
     } catch (err) {
       err.tableName = Model.modelName;
       throw new errors.DbError(null, err);
@@ -108,7 +93,7 @@ module.exports = (Model) => ({
     }
 
     try {
-      await Model.updateMany(exchangeQueryId(query), value, { upsert });
+      await Model.updateMany(query, value, { upsert });
     } catch (err) {
       err.tableName = Model.modelName;
       throw new errors.DbError(null, err);
@@ -117,7 +102,7 @@ module.exports = (Model) => ({
 
   async deleteOne(query) {
     try {
-      await Model.deleteOne(exchangeQueryId(query));
+      await Model.deleteOne(query);
     } catch (err) {
       err.tableName = Model.modelName;
       throw new errors.DbError(null, err);
@@ -126,7 +111,7 @@ module.exports = (Model) => ({
 
   async delete(query) {
     try {
-      await Model.deleteMany(exchangeQueryId(query));
+      await Model.deleteMany(query);
     } catch (err) {
       err.tableName = Model.modelName;
       throw new errors.DbError(null, err);

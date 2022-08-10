@@ -10,9 +10,14 @@ const config = require('#/config');
 const { dotCaseToCamelCase } = require('#/libs/util');
 
 const basePath = `${__dirname}/index.js`;
-const mongoose = Mongoose.createConnection(
-  config.mongoose.endPoint, { useNewUrlParser: true, useUnifiedTopology: true },
-);
+
+const options = { useNewUrlParser: true, useUnifiedTopology: true };
+if (config.mongoose.useSSL) {
+  options.ssl = true;
+  options.sslCA = `${process.cwd()}/.keys/rds-combined-ca-bundle.pem`;
+  options.retryWrites = false;
+}
+const mongoose = Mongoose.createConnection(config.mongoose.endPoint, options);
 const db = { mongoose };
 
 function importFile(file, dir) {

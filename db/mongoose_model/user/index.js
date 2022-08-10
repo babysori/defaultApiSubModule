@@ -7,7 +7,7 @@ const { Types } = Schema;
 const { ObjectId } = Types;
 
 const schema = new Schema({
-  _id: { type: ObjectId, alias: 'id' },
+  _id: { type: ObjectId },
   abuser: { type: Boolean },
   resumeAt: { type: Date },
   name: { type: String },

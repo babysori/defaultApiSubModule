@@ -67,7 +67,7 @@ exports.getCodeName = (err) => {
   return ret;
 };
 
-exports.checkCommon = code => code >= table.CommonError;
+exports.checkCommon = (code) => code >= table.CommonError;
 
 function AbstractError(msg, origin, constr) {
   Error.captureStackTrace(this, constr || this);
@@ -82,7 +82,6 @@ AbstractError.prototype.name = 'Abstract Error';
 
 Object.keys(table).forEach((errorName) => {
   const errorFn = function errorConstructor(msg, origin) {
-    // eslint-disable-next-line no-underscore-dangle
     errorFn.super_.call(this, msg, origin, this.constructor);
   };
   exports[errorName] = errorFn;

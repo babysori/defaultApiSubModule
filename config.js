@@ -16,7 +16,7 @@ const raw = {
     },
 
     logDb: {
-      endPoint: env.LOG_DB_END_POINT,
+      endPoint: `mongodb://${env.LOG_DB_END_POINT}:27017`,
       database: 'logs',
     },
 
@@ -36,10 +36,21 @@ const raw = {
       logging: false,
     },
     mongoose: {
-      endPoint: `${env.MONGOOSE_END_POINT}/default`,
+      endPoint: `mongodb://${env.MONGOOSE_END_POINT}:27017/default`,
     },
     redis: {
       endPoint: `${env.REDIS_END_POINT}`,
+    },
+
+    accessTokenExpiryTime: 3600 * 24,
+
+    s3UploadExpireTime: Number(env.S3_UPLOAD_EXPIRE_SECOND) || 60 * 5,
+    s3DownloadExpireTime: Number(env.S3_DOWNLOAD_EXPIRE_SECOND) || 60 * 5,
+    bucket: {
+      shop: {
+        name: env.BUCKET_SHOP_NAME,
+        domain: env.BUCKET_SHOP_DOMAIN,
+      },
     },
   },
 
