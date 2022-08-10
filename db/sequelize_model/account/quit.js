@@ -2,7 +2,7 @@
 
 require('module-alias/register');
 
-const { AccountType } = require('#/libs/constants');
+const { AccountType } = require('#/constants');
 
 module.exports = (sequelize, DataTypes) => sequelize.define(
   'account_quit',

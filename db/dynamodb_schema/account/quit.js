@@ -3,7 +3,7 @@
 require('module-alias/register');
 
 const { ddb } = require('#/libs/aws');
-const { ACCOUNT_QUIT } = require('#/libs/constants').DDBTableName;
+const { ACCOUNT_QUIT } = require('#/constants').DDBTableName;
 
 const params = {
   TableName: ACCOUNT_QUIT,

@@ -2,7 +2,7 @@
 
 require('module-alias/register');
 
-const { ACCOUNT } = require('#/libs/constants').DDBTableName;
+const { ACCOUNT } = require('#/constants').DDBTableName;
 // eslint-disable-next-line global-require
 const handler = { ...require('#/libs/db_handler/dynamo')(ACCOUNT) };
 

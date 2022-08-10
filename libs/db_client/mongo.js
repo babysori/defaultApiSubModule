@@ -7,8 +7,16 @@ require('module-alias/register');
 const errors = require('#/libs/errors');
 const logger = require('#/libs/logger');
 
-module.exports = (endPoint, database) => {
-  const client = new MongoClient(endPoint, { useNewUrlParser: true, useUnifiedTopology: true });
+module.exports = (dbconfig) => {
+  const { endPoint, database, useSSL } = dbconfig;
+  const options = { useNewUrlParser: true, useUnifiedTopology: true };
+  if (useSSL) {
+    options.ssl = true;
+    options.sslCA = `${process.cwd()}/.keys/rds-combined-ca-bundle.pem`;
+    options.retryWrites = false;
+  }
+
+  const client = new MongoClient(endPoint, options);
 
   client.connect((err) => {
     if (err) {

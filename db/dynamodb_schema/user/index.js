@@ -3,7 +3,7 @@
 require('module-alias/register');
 
 const { ddb } = require('#/libs/aws');
-const { USER } = require('#/libs/constants').DDBTableName;
+const { USER } = require('#/constants').DDBTableName;
 
 const params = {
   TableName: USER,

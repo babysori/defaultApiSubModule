@@ -18,7 +18,7 @@ const { isEmpty } = require('#/libs/util');
 const AccountMDB = require('#/db/mongoose/account');
 const AccountQuitMDB = require('#/db/mongoose/account/quit');
 
-const { AccountType } = require('#/libs/constants');
+const { AccountType } = require('#/constants');
 
 const GoogleRequest = require('./requests/google');
 const AppleRequest = require('./requests/apple');
